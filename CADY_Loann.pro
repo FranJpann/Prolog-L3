@@ -54,7 +54,7 @@ vin5(L) :- vin1(L1), vin2(L2), diff(L1, L2, L).
 % vignoble = vin5 x viticulteurs
 
 produit([], _, []).
-produit([X|L1], [Y1, Y2], [X, Y1, X, Y2|Res]) :-
+produit([X|L1], [Y1, Y2], [(X, Y1), (X, Y2)|Res]) :-
 	produit(L1, [Y1, Y2], Res).
 
-%vignoble(L) :- vin5(L1), viticulteurs(L2), produit(L1, L2, L).
+vignoble(L) :- vin5(L1), viticulteurs(L2), produit(L1, L2, L).
