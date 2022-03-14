@@ -1,6 +1,6 @@
-% vin1 ([Numéro, Cru, Millésime, Degré], ...])
-% vin2 ([Numéro, Cru, Millésime, Degré], ...])
-% viticulteurs ([Patronyme, Ville, Région], ...])
+% vin1 ([(Numéro, Cru, Millésime, Degré), ...])
+% vin2 ([(Numéro, Cru, Millésime, Degré), ...])
+% viticulteurs ([ (Patronyme, Ville, Région), ...])
 
 vin1([(100, "Chablis", 1974, 12),
 	(110, "Mercurey", 1978, 13),
@@ -35,8 +35,7 @@ union([],L2, L2).
 union([X|Y], L2 , [X|Res]) :-
     \+(member(X, L2)),
 	union(Y, L2, Res).
-union([X|Y], L2, Res) :-
-    member(X, L2),
+union([_|Y], L2, Res) :-
 	union(Y, L2, Res).
 
 vin4(L) :- vin1(L1), vin2(L2), union(L1, L2, L).
@@ -54,7 +53,8 @@ vin5(L) :- vin1(L1), vin2(L2), diff(L1, L2, L).
 
 % vignoble = vin5 x viticulteurs
 
-produit()
+produit([], _, []).
+produit([X|L1], [Y1, Y2], [X, Y1, X, Y2|Res]) :-
+	produit(L1, [Y1, Y2], Res).
 
-
-% vignoble(L) :- vin5(L1), viticulteurs(L2), produit(L1, L2, L).
+%vignoble(L) :- vin5(L1), viticulteurs(L2), produit(L1, L2, L).
