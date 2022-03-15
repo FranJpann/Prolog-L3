@@ -82,5 +82,13 @@ vin7(L) :- vin4(L1), restr(L1, L).
 % vin8 = jointure vin4 et viticulteur sur Ville = Cru
 
 joint([], _, []).
-joint([(N, C, M, D)|L1], [(X1, Y1), (X2, Y2)], [(A, B, C, D, X1, Y1)|Res]) :-
-	
+joint([(N, C, M, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(N, C, M, D, X1, Y1, Z1)|Res]) :-
+	C = Y1,
+	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
+joint([(N, C, M, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(N, C, M, D, X2, Y2, Z2)|Res]) :-
+	C = Y2,
+	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
+joint([_|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], Res) :-
+	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
+
+vin8(L) :- vin5(L1), viticulteurs(L2), joint(L1, L2, L).
