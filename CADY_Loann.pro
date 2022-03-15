@@ -129,8 +129,6 @@ projvin9([_|L], Res) :-
 	projvin9(L, Res).
 projvin9(L) :- vin9(L1), projvin9(L1, L).
 
-test(L) :- projvin9(L1), test(L1, L). 
-
 projvin9_type([], _, []).
 projvin9_type([(C)|L1], [(X1), (X2)], [(C, X1), (C, X2)|Res]) :-
 	projvin9_type(L1, [(X1), (X2)], Res).
