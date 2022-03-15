@@ -2,19 +2,22 @@
 % vin2 ([(Numéro, Cru, Millésime, Degré), ...])
 % viticulteurs ([ (Patronyme, Ville, Région), ...])
 
-vin1([(100, "Chablis", 1974, 12),
+vin1([
+	(100, "Chablis", 1974, 12),
 	(110, "Mercurey", 1978, 13),
 	(120, "Macon", 1977, 12)
 ]).
 
-vin2([(100, "Chablis", 1974, 12),
-	  (110, "Sancerre", 1979, 11),
-	  (210, "Pouilly", 1980, 12),
-	  (230, "Pouilly", 1981, 12)
+vin2([
+	(100, "Chablis", 1974, 12),
+	(200, "Sancerre", 1979, 11),
+	(210, "Pouilly", 1980, 12),
+	(230, "Pouilly", 1981, 12)
 ]).
 
-viticulteurs([("Nicolas", "Pouilly", "Bourgogne"),
-			  ("Martin", "Bordeaux", "Bordelais")
+viticulteurs([
+	("Nicolas", "Pouilly", "Bourgogne"),
+	("Martin", "Bordeaux", "Bordelais")
 ]).
 
 % vin3 = intersection de vin1 et vin2
@@ -82,13 +85,20 @@ vin7(L) :- vin4(L1), restr(L1, L).
 % vin8 = jointure vin4 et viticulteur sur Ville = Cru
 
 joint([], _, []).
-joint([(N, C, M, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(N, C, M, D, X1, Y1, Z1)|Res]) :-
-	C = Y1,
+joint([(A, B, C, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(A, B, C, D, X1, Y1, Z1)|Res]) :-
+	B = Y1,
 	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
-joint([(N, C, M, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(N, C, M, D, X2, Y2, Z2)|Res]) :-
-	C = Y2,
+joint([(A, B, C, D)|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], [(A, B, C, D, X2, Y2, Z2)|Res]) :-
+	B = Y2,
 	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
-joint([_|L1], [(X1, Y1, Z1), (X2, Y2, Z2)], Res) :-
-	joint(L1, [(X1, Y1, Z1), (X2, Y2, Z2)], Res).
+joint([_|L1], L2, Res) :-
+	joint(L1, L2, Res).
 
-vin8(L) :- vin5(L1), viticulteurs(L2), joint(L1, L2, L).
+vin8(L) :- vin4(L1), viticulteurs(L2), joint(L1, L2, L).
+
+% vin9([(Cru, Millésime, Degré), ...])
+% type([(Millésime, Degré), ...])
+
+vin9([
+	()
+]).
