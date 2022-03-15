@@ -59,3 +59,28 @@ produit([(A, B, C, D)|L1], [(X1), (X2)], [(A, B, C, D, X1), (A, B, C, D, X2)|Res
 
 vignoble(L) :- vin5(L1), viticulteurs(L2), produit(L1, L2, L).
 
+% vin6 = projection de vin5 sur cru, millésime
+
+proj([], []).
+proj([(_, C, M, _)|L1], [(C, M)|Res]) :-
+	proj(L1, Res).
+
+vin6(L) :- vin5(L1), proj(L1, L).
+
+% vin7 = restriction de vin4 aux Millésimes compris strict entre 1975 et 1980
+
+restr([], []).
+restr([(N, C, M, D)|L1], [(N, C, M, D)|Res]) :-
+	M > 1975,
+	M < 1980,
+	restr(L1, Res).
+restr([_|L1], Res) :-
+	restr(L1, Res).
+
+vin7(L) :- vin4(L1), restr(L1, L).
+
+% vin8 = jointure vin4 et viticulteur sur Ville = Cru
+
+joint([], _, []).
+joint([(N, C, M, D)|L1], [(X1, Y1), (X2, Y2)], [(A, B, C, D, X1, Y1)|Res]) :-
+	
