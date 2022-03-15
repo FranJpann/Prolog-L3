@@ -47,7 +47,7 @@ vin4(L) :- vin1(L1), vin2(L2), union(L1, L2, L).
 
 diff([], _, []).
 diff([X|Y], L2, [X|Res]) :-
-	\+(member(X, L2)),
+	\+ member(X, L2),
 	diff(Y, L2, Res).
 diff([_|Y], L2, Res) :-
 	diff(Y, L2, Res).
@@ -100,5 +100,60 @@ vin8(L) :- vin4(L1), viticulteurs(L2), joint(L1, L2, L).
 % type([(Millésime, Degré), ...])
 
 vin9([
-	()
+	("Macon", 1977, 12),
+	("Macon", 1979, 14),
+	("Macon", 1980, 12),
+	("Saumur", 1977, 12),
+	("Saumur", 1979, 14),
+	("Chablis", 1977, 12)
 ]).
+
+type([
+	(1977, 12),
+	(1979, 14)
+]).
+
+% cru([(Cru), ...]) = vin9 / type (projvin9 \ projvin9_type_moinsvin9_projcru)
+
+% Sous relations :
+% projvin9 = projection vin9 sur le cru (En enlevant les doublons)
+% projvin9_type = projvin9 x type
+% projvin9_type_moinsvin9 = projvin9_type \ vin9
+% projvin9_type_moinsvin9_projcru = projection projvin9_type_moinsvin9 sur le cru
+
+projvin9([], []).
+projvin9([(C, _, _)|L], [C|Res]) :-
+	\+ member((C, _, _) , L),
+	projvin9(L, Res).
+projvin9([_|L], Res) :-
+	projvin9(L, Res).
+projvin9(L) :- vin9(L1), projvin9(L1, L).
+
+test(L) :- projvin9(L1), test(L1, L). 
+
+projvin9_type([], _, []).
+projvin9_type([(C)|L1], [(X1), (X2)], [(C, X1), (C, X2)|Res]) :-
+	projvin9_type(L1, [(X1), (X2)], Res).
+projvin9_type(L) :- projvin9(L1), type(L2), projvin9_type(L1, L2, L).
+
+projvin9_type_moinsvin9([], _, []).
+projvin9_type_moinsvin9([X|L1], L2, [X|Res]) :-
+	\+ member(X, L2),
+	projvin9_type_moinsvin9(L1, L2, Res).
+projvin9_type_moinsvin9([_|L1], L2, Res) :-
+	projvin9_type_moinsvin9(L1, L2, Res).
+projvin9_type_moinsvin9(L) :- projvin9_type(L1), vin9(L2), projvin9_type_moinsvin9(L1, L2, L).
+
+projvin9_type_moinsvin9_projcru([], []).
+projvin9_type_moinsvin9_projcru([(C, _, _)|L], [C|Res]) :-
+	projvin9_type_moinsvin9_projcru(L, Res).
+projvin9_type_moinsvin9_projcru(L) :- projvin9_type_moinsvin9(L1), projvin9_type_moinsvin9_projcru(L1, L).
+
+
+cru([], _, []).
+cru([C|L1], L2, [C|Res]) :-
+	\+ member(C, L2),
+	cru(L1, L2, Res).
+cru([_|L1], L2, Res) :-
+	cru(L1, L2, Res).
+cru(L) :- projvin9(L1), projvin9_type_moinsvin9_projcru(L2), cru(L1, L2, L).
