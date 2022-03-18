@@ -42,3 +42,23 @@ ieme_bande(N, O, V, B, M, Bande):-
     derniere_ligne(O_,_, O), derniere_colonne(V_, _, V),
     premiere_ligne(_, B_, B), premiere_colonne(_, M_, M),
     ieme_bande_rec(N_, O_, V_, B_, M_, Bande).
+
+r_b(I, cube(_J, O, V, B, M, _R), cube(J, O_, V_, B_, M_, R)):-
+    r_b_rec(I, O, V, B, M, O_, V_, B_, M_).
+r_b_rec(N, O, V, B, M, O_, V_, B_, M_) :-
+    N>1, N_ is N-1,
+    derniere_ligne(O__, LO, O), derniere_colonne(V__, CV, V),
+    premiere_ligne(LB, B__, B), premiere_colonne(CM, M__, M),
+    r_b_rec(N_, O__, V__, B__, M__, O3, V3, B3, M3),
+    derniere_ligne(O3, LO, O), derniere_colonne(V3, CV, V),
+    premiere_ligne(LB, B3, B), premiere_colonne(CM, M3, M).
+r_b_rec(1, O, V, B, M, O_, V_, B_, M_) :-
+    derniere_ligne(O__, LO, O),
+    derniere_colonne(V__, CV, V),
+    premiere_ligne(LB, B__, B),
+    premiere_colonne(CM, M__, M),
+    reverse(LO, RO), reverse(LB, RB),
+    derniere_ligne(O__, CM, O_),
+    derniere_colonne(V__, RO,V_),
+    premiere_ligne(CV , B__, B_),
+    premiere_colonne(RB, M__, M_).
