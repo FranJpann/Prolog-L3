@@ -1,3 +1,11 @@
+% membre(élément, liste) = vérifie si élément fait partie de liste
+
+membre(X, [Y|_]) :-
+	X = Y.
+membre(X, [_|L]) :-
+	membre(X, L).
+
+
 % vin1 ([(Numéro, Cru, Millésime, Degré), ...])
 % vin2 ([(Numéro, Cru, Millésime, Degré), ...])
 % viticulteurs ([ (Patronyme, Ville, Région), ...])
@@ -24,7 +32,7 @@ viticulteurs([
 
 inter([], _,  []).
 inter([X|Y], L2, [X|Res]) :- 
-	member(X, L2),
+	membre(X, L2),
 	inter(Y, L2, Res).
 inter([_|Y], L2, Res) :-
 	inter(Y, L2, Res).
@@ -36,7 +44,7 @@ vin3(L) :- vin1(L1), vin2(L2), inter(L1, L2, L).
 union([],[],[]).
 union([],L2, L2).
 union([X|Y], L2 , [X|Res]) :-
-    \+(member(X, L2)),
+    \+(membre(X, L2)),
 	union(Y, L2, Res).
 union([_|Y], L2, Res) :-
 	union(Y, L2, Res).
@@ -47,7 +55,7 @@ vin4(L) :- vin1(L1), vin2(L2), union(L1, L2, L).
 
 diff([], _, []).
 diff([X|Y], L2, [X|Res]) :-
-	\+ member(X, L2),
+	\+ membre(X, L2),
 	diff(Y, L2, Res).
 diff([_|Y], L2, Res) :-
 	diff(Y, L2, Res).
@@ -123,7 +131,7 @@ type([
 
 projvin9([], []).
 projvin9([(C, _, _)|L], [C|Res]) :-
-	\+ member((C, _, _) , L),
+	\+ membre((C, _, _) , L),
 	projvin9(L, Res).
 projvin9([_|L], Res) :-
 	projvin9(L, Res).
@@ -136,7 +144,7 @@ projvin9_type(L) :- projvin9(L1), type(L2), projvin9_type(L1, L2, L).
 
 projvin9_type_moinsvin9([], _, []).
 projvin9_type_moinsvin9([X|L1], L2, [X|Res]) :-
-	\+ member(X, L2),
+	\+ membre(X, L2),
 	projvin9_type_moinsvin9(L1, L2, Res).
 projvin9_type_moinsvin9([_|L1], L2, Res) :-
 	projvin9_type_moinsvin9(L1, L2, Res).
@@ -150,7 +158,7 @@ projvin9_type_moinsvin9_projcru(L) :- projvin9_type_moinsvin9(L1), projvin9_type
 
 cru([], _, []).
 cru([C|L1], L2, [C|Res]) :-
-	\+ member(C, L2),
+	\+ membre(C, L2),
 	cru(L1, L2, Res).
 cru([_|L1], L2, Res) :-
 	cru(L1, L2, Res).

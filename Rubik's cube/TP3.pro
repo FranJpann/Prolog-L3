@@ -43,7 +43,7 @@ ieme_bande(N, O, V, B, M, Bande):-
     premiere_ligne(_, B_, B), premiere_colonne(_, M_, M),
     ieme_bande_rec(N_, O_, V_, B_, M_, Bande).
 
-r_b(I, cube(_J, O, V, B, M, _R), cube(J, O_, V_, B_, M_, R)):-
+r_b(I, cube(J, O, V, B, M, R), cube(J, O_, V_, B_, M_, R)):-
     r_b_rec(I, O, V, B, M, O_, V_, B_, M_).
 r_b_rec(N, O, V, B, M, O_, V_, B_, M_) :-
     N>1, N_ is N-1,
